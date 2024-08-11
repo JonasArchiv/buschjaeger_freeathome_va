@@ -45,4 +45,6 @@ try:
 
 except requests.exceptions.RequestException as e:
     print(f"Error: {e}")
-
+    print("Response Status Code:", response.status_code)
+    print("Response Headers:", response.headers)
+    print("Response Text:", response.text)
