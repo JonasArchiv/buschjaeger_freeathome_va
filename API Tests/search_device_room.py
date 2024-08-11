@@ -15,9 +15,9 @@ def filter_und_drucke_informationen(daten, kategorie, suchbegriff, suchtyp):
         if kategorie == "device":
             for geraete_id, geraet in sysap.get('devices', {}).items():
                 if suchtyp == "name" and suchbegriff.lower() in geraet.get('displayName', '').lower():
-                    drucke_geraet_info(geraete_id, geraet)
+                    drucke_geraet_info(geraete_id, geraet, suchbegriff)
                 elif suchtyp == "id" and suchbegriff.lower() == geraete_id.lower():
-                    drucke_geraet_info(geraete_id, geraet)
+                    drucke_geraet_info(geraete_id, geraet, suchbegriff)
         elif kategorie == "room":
             for stockwerk_id, stockwerk in sysap.get('floorplan', {}).get('floors', {}).items():
                 for raum_id, raum in stockwerk.get('rooms', {}).items():
@@ -27,7 +27,7 @@ def filter_und_drucke_informationen(daten, kategorie, suchbegriff, suchtyp):
                         drucke_raum_info(raum_id, raum)
 
 
-def drucke_geraet_info(geraete_id, geraet):
+def drucke_geraet_info(geraete_id, geraet, suchbegriff):
     print(f"  Geräte-ID: {geraete_id}")
     print(f"    Name: {geraet.get('displayName', 'Nicht verfügbar')}")
     print(f"    Raum: {geraet.get('room', 'Nicht verfügbar')}")
@@ -39,7 +39,8 @@ def drucke_geraet_info(geraete_id, geraet):
     if kanaele:
         print("    Kanäle:")
         for kanal_id, kanal in kanaele.items():
-            drucke_kanal_info(kanal_id, kanal)
+            if suchbegriff.lower() in kanal.get('displayName', '').lower():
+                drucke_kanal_info(kanal_id, kanal)
 
 
 def drucke_kanal_info(kanal_id, kanal):
